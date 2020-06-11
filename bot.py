@@ -8,9 +8,6 @@ import config
 
 from modules import db
 
-# db_connection = db.connect('./db')
-# db.setup(db_connection)
-
 conn = db.DBConnection('./db')
 
 # Delete default help command
@@ -35,14 +32,11 @@ async def createshow(ctx, *args):
 	desc = args[1]
 	date = args[2]
 	query = "INSERT INTO shows (`name`, `description`, `date`) VALUES ('{}', '{}', '{}')".format(name, desc, date)
-	# cursor = db_connection.cursor()
-	# cursor.execute(query)
-	# db_connection.commit()
 	lastrowid = conn.insert(query)
 	query = "SELECT * FROM shows WHERE id = {}".format(lastrowid)
-	# result = cursor.execute(query).fetchall()
 	result = conn.selectall(query)
-	await ctx.author.send(result)
+	embed = discord.Embed(title = "{} - {}".format(name, date), description = desc, color = discord.Color.from_rgb(100, 255, 100))
+	await ctx.send(embed = embed)
 
 
 @bot.command()
@@ -59,9 +53,8 @@ async def getshows(ctx):
 
 @bot.command()
 async def shutdown(ctx):
-	# db.close(db_connection)
 	conn.close()
-	await ctx.send("✅ Shutting down")
+	await ctx.send(":robot: Shutting down")
 	await bot.logout()
 
 
