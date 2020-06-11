@@ -19,11 +19,14 @@ async def on_ready():
 	print('Running as {} {}'.format(bot.user.name, bot.user.id))
 
 # Help message.. Send a PM to the user that requests help
-@bot.command()
+@bot.command(description = "Send a help message")
 async def help(ctx):
-	await ctx.author.send("**I'm sorry, I can't help you right now...**")
+	embed = discord.Embed(title = "Help", description = "Help message (all commands start with a !, e.g. !getshows)", color = discord.Color.from_rgb(255, 50, 50))
+	for command in bot.commands:
+		embed.add_field(name = command.name, value = command.description, inline = False)
+	await ctx.author.send(embed = embed)
 
-@bot.command()
+@bot.command(description = "Create a show and save it in the database")
 async def createshow(ctx, *args):
 	if len(args) < 3:
 		return await ctx.author.send("Invalid syntax, usage: !createshow <name> <description> <date>")
@@ -39,7 +42,7 @@ async def createshow(ctx, *args):
 	await ctx.send(embed = embed)
 
 
-@bot.command()
+@bot.command(description = "Retreive all the upcoming shows from the database and send them over to the user")
 async def getshows(ctx):
 	query = "SELECT * FROM SHOWS"
 	result = conn.selectall(query)
@@ -51,7 +54,7 @@ async def getshows(ctx):
 			embed.add_field(name = "{} - {}".format(show[1], show[3]), value = show[2], inline = False)
 	await ctx.send(embed = embed)
 
-@bot.command()
+@bot.command(description = "Shut the server down")
 async def shutdown(ctx):
 	conn.close()
 	await ctx.send(":robot: Shutting down")
