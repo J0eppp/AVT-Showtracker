@@ -7,10 +7,8 @@ class DBConnection:
         self.connection = sqlite3.connect(file)
         self.filename = file
 
-
     def commit(self):
         self.connection.commit()
-
 
     def insert(self, query):
         cursor = self.connection.cursor()
@@ -29,9 +27,13 @@ class DBConnection:
         return cursor.fetchone()
 
 
-    def close(self):
-        self.connection.close()
+    def upload_file_to_show(self, url, file_name, show_name):
+        cursor = self.connection.cursor()
+        query = "INSERT INTO files (`url`, `file_name`, `show_name`) VALUES ('{}', '{}', '{}')".format(url, file_name, show_name)
 
+    def close(self):
+        self.connection.commit()
+        self.connection.close()
 
 
 def connect(file):
@@ -54,6 +56,18 @@ def setup(conn):
     );
     """
     conn.execute(query)
+
+    query = """
+    CREATE TABLE `files` (
+        `id` integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+        `url` TEXT NOT NULL,
+        `file_name` TEXT NOT NULL,
+        `show_name` TEXT NOT NULL
+    )
+    """
+    conn.execute(query)
+    conn.commit()
+    conn.close()
 
 
 def close(conn):
