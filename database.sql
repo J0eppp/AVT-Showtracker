@@ -4,3 +4,10 @@ CREATE TABLE `shows` (
     `description` TEXT NOT NULL,
     `date` DATETIME NOT NULL
 );
+
+CREATE TABLE `files` (
+    `id` integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    `url` TEXT NOT NULL,
+    `file_name` TEXT NOT NULL,
+    `show_name` TEXT NOT NULL
+);

@@ -63,7 +63,7 @@ def setup(conn):
         `url` TEXT NOT NULL,
         `file_name` TEXT NOT NULL,
         `show_name` TEXT NOT NULL
-    )
+    );
     """
     conn.execute(query)
     conn.commit()

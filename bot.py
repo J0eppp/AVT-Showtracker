@@ -68,7 +68,7 @@ async def shutdown(ctx):
 	return await ctx.send(':x: Insufficient permissions/roles :x:')
 
 
-@bot.command()
+@bot.command(description = "Return the name of all the user's roles")
 async def checkroles(ctx):
 	[print(role.name) for role in ctx.author.roles]
 	return [await ctx.send('{}: {}'.format(ctx.author.name, role.name)) for role in ctx.author.roles if role.name != '@everyone']
